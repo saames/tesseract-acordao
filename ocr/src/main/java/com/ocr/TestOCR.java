@@ -26,7 +26,7 @@ public class TestOCR {
         try {
 
             // Recebe o arquivo PDF
-            File pdf = new File("E:\\GITHUB\\tesseract-acordao\\ocr\\src\\acordaos\\178 - 2024 CODIL IMPORTAÇÃO E EXPORTAÇÃO EIRELI - EPP 2015-81-10240.pdf");
+            File pdf = new File("E:\\GITHUB\\tesseract-acordao\\ocr\\src\\acordaos\\200 - 2024 GUILHERME SALMAZO 2021-81-06021.pdf");
             PDDocument documento = PDDocument.load(pdf);
             PDFRenderer pdfRenderer = new PDFRenderer(documento);
             BufferedImage imagem = pdfRenderer.renderImageWithDPI(0, 300);
@@ -60,7 +60,6 @@ public class TestOCR {
 
             // TESTE
 
-
             // Pós-processamento da imagem (Redimensionamento e Padrão monocromático)
             // BufferedImage imagemPosProcessamento = new BufferedImage(2480, 3521, BufferedImage.TYPE_BYTE_BINARY);
             // Graphics2D graphics2D = imagemPosProcessamento.createGraphics();
@@ -81,18 +80,20 @@ public class TestOCR {
 
             // BufferedImage imagem = ImageIO.read(new File("E:\\GITHUB\\tesseract-acordao\\ocr\\src\\acordaos\\teste.png"));
             
-            BufferedImage area = imagemPosProcessamento.getSubimage(840, 560, 1470, 510);
+            BufferedImage area = imagemPosProcessamento.getSubimage(840, 560, 1480, 710);
             String[] campos = tesseract.doOCR(area).split("\n");
             String texto = "";
+            int cont = 0;
             boolean status = false;
             for (int i = 0; i < campos.length; i++){
                 if (campos[i].contains("/20")){
                     status = true;
-                } else if (campos[i].contains("EMENTA")){
-                    status = false;
+                } else if (campos[i].contains("EMENTA") || cont == 8){
+                    break;
                 }
                 if (status) {
                     texto = texto + campos[i].trim() + "\n";
+                    cont = cont + 1;
                 }
             };
             // String texto = tesseract.doOCR(area).replace("\n\n", "\n").trim();
